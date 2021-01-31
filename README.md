@@ -37,7 +37,7 @@ const parseShools = require('./parsers/parseShools.js')
 
 parseSchools.parseForSchools(1, 10, 1)
 
-parseMajors.parseMajors.parseMajorsWithMap('./output/majors/schoolsInFile1.json')
+parseMajors.parseMajorsWithMap('./output/majors/schoolsInFile1.json')
 ```
 
 ## 🔮 Parsers
