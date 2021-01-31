@@ -1,12 +1,12 @@
-# Parse Univerisity Data
+# 🏫 Parse Univerisity Data
 
-## What is this?
+## ❓What is this?
 There is an abundance of useful information concerning colleges and universities collected by government agencies. However, you don't need all the info they provide, just the stuff that's really important. So, I parse-universities is an attempt to simplify the process, and also converts csv to json for better ease of implementation in existing js based code bases.
 
-## Future Intentions
+## 🔭 Future Intentions
 I intend on writing a more detailed documentation for the different parser functions, and a better quick start guide.
 
-## Quick Start
+## 🚀 Quick Start
 First, install the necessary npm dependencies for the project
 ```
 npm install
@@ -40,7 +40,7 @@ parseSchools.parseForSchools(1, 10, 1)
 parseMajors.parseMajors.parseMajorsWithMap('./output/majors/schoolsInFile1.json')
 ```
 
-## Parsers
+## 🔮 Parsers
 I've written a couple different parser functions that serve different uses. 
 
 ### Parse CIP CSV and convert to JSON
@@ -48,15 +48,15 @@ Check [parsers/parseCIPLookup.js](https://github.com/DrPoppyseed/parse-universit
 
 Parses through [csv/cip/cipraw.csv](#) and outputs json file with the major's cipcode, name, and description, in the following format.
 ```
-	[
-		...,
-		{
-			"cipcode": "52.0305",
-			"major": "Accounting and Business/Management",
-			"description": "An integrated or combined program in accounting and business administration/management that prepares individuals to function as accountants and business managers."
-		},
-		...
-	]
+[
+  ...,
+  {
+    "cipcode": "52.0305",
+    "major": "Accounting and Business/Management",
+    "description": "An integrated or combined program in accounting and business administration/management that prepares individuals to function as accountants and business managers."
+  },
+  ...
+]
 
 ```
 

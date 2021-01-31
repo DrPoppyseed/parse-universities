@@ -1,3 +1,4 @@
 /node_modules
 /output
 /local.js
+.DS_Store
