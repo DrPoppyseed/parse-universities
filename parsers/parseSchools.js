@@ -15,7 +15,7 @@ function parseForSchools(from, to, num) {
   let accum = []
 
   for (let i = from; i <= to; i++) {
-    const filepath = `./majorsAndMinors/majorsAndMinorsCsv${i}.csv`
+    const filepath = `./csv/majorsAndMinors/majorsAndMinorsCsv${i}.csv`
     csv().fromFile(filepath).then(res => {
       let currentOpeid = res[0].OPEID6
       let currentSchoolName = res[0].INSTNM

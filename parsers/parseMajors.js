@@ -37,7 +37,7 @@ async function createSchoolObj(
   schoolNameCamel,
   schoolOpeid
 ) {
-  const FILE_NAME_BASE = "./majorsAndMinors/majorsAndMinorsCsv";
+  const FILE_NAME_BASE = "./csv/majorsAndMinors/majorsAndMinorsCsv";
   let accum = [];
   let fileNum = fromFileNum;
 

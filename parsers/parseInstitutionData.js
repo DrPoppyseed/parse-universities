@@ -4,7 +4,7 @@ const csv = require("csvtojson");
 function parseInstitutions(from, to) {
 	for (let i = from; i <= to; i++) {
 		console.log(i)
-		const filePath = `./institutionAllData/institution${i}.csv`;
+		const filePath = `./csv/institutionAllData/institution${i}.csv`;
 		csv()
 			.fromFile(filePath)
 			.then(async (res) => {
@@ -29,7 +29,7 @@ function parseInstitutions(from, to) {
 function parseInstitutionAndJoin(from, to) {
 	for (let i = from, i <= to; i++) {
 		console.log(i)
-		const filePath = `./institutionAllData/institution${i}.csv`
+		const filePath = `./csv/institutionAllData/institution${i}.csv`
 		csv()
 			.fromFile(filePath)
 			.then(async (res) => {
