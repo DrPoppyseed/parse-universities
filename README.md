@@ -24,6 +24,8 @@ node index.js
 ```
 Create a folder named 'output' in the root directory, and write the following.
 ```
+const parseMajors = require('./parsers/parseMajors.js')
+
 parseMajors.parseMajorsWithMap('./output/majors/schoolsInFile1.json')
 ```
 Run the parser function.
@@ -34,6 +36,7 @@ node index.js
 In the end, the index.js file should like below.
 ```
 const parseShools = require('./parsers/parseShools.js')
+const parseMajors = require('./parsers/parseMajors.js')
 
 parseSchools.parseForSchools(1, 10, 1)
 
