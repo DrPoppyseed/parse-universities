@@ -3,17 +3,16 @@ const csv = require("csvtojson");
 
 function parseInstitutions(from, to) {
 	for (let i = from; i <= to; i++) {
-		console.log(i)
+		console.log(i);
 		const filePath = `./csv/institutionAllData/institution${i}.csv`;
 		csv()
 			.fromFile(filePath)
 			.then(async (res) => {
 				return await res.map((school, index) => {
-					return _extractInfoFromCsv(school)
+					return _extractInfoFromCsv(school);
 				});
 			})
 			.then((item) => {
-				// console.log(item);
 				const filename = `./output/institution/institutionData${i}.json`;
 				fs.writeFile(filename, JSON.stringify(item), (err) => {
 					if (err) console.log(err);
@@ -27,20 +26,20 @@ function parseInstitutions(from, to) {
 }
 
 function parseInstitutionAndJoin(from, to) {
-	for (let i = from, i <= to; i++) {
-		console.log(i)
-		const filePath = `./csv/institutionAllData/institution${i}.csv`
+	for (let i = from; i <= to; i++) {
+		console.log(i);
+		const filePath = `./csv/institutionAllData/institution${i}.csv`;
 		csv()
 			.fromFile(filePath)
 			.then(async (res) => {
 				return await res.map((school, index) => {
-					return _extractInfoFromCsv(school)
-				})
+					return _extractInfoFromCsv(school);
+				});
 			})
 			.then((item) => {
-				const filename = `./output/institutionJoined/institutionData${from}-${to}.json`
-				fr.appendFile(filename, JSON.stringify)
-			})
+				const filename = `./output/institutionJoined/institutionData${from}-${to}.json`;
+				fr.appendFile(filename, JSON.stringify);
+			});
 	}
 }
 
@@ -49,8 +48,9 @@ function _extractInfoFromCsv(obj) {
 		unitid: obj.UNITID,
 		opeid: obj.OPEID,
 		opeid6: obj.OPEID6,
-		name: obj.INSTNM
-	}
+		name: obj.INSTNM,
+	};
 }
 
 module.exports.parseInstitutions = parseInstitutions;
+
