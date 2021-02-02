@@ -52,5 +52,9 @@ function _extractInfoFromCsv(obj) {
 	};
 }
 
+function searchByUniversityName(name) {
+	
+}
+
 module.exports.parseInstitutions = parseInstitutions;
 
