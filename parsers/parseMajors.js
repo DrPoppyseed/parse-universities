@@ -120,7 +120,7 @@ async function createSchoolObjUnitid(
         );
         accum = [...accum, ...result];
 
-        console.log(schoolNameCamel, accum);
+        // console.log(schoolNameCamel, accum);
 
         if (fileNum === toFileNum) _nestMajorsUnitid(schoolNameCamel, accum);
         // else fileNum = files[i];
@@ -157,9 +157,9 @@ async function _nestMajors(schoolNameCamel, majors) {
 
 async function _nestMajorsUnitid(schoolNameCamel, majors) {
     const result = majors.map((major) => _parsedMajor(major));
-    // console.trace(majors)
     const obj = {
         unitid: majors[0].unitid,
+        opeid6: majors[0].opeid6,
         schoolName: majors[0].schoolName,
         majors: [...result],
     };
@@ -227,64 +227,10 @@ async function parseMajorsWithMapUnitid(filePath) {
     const data = fs.readFileSync(filePath);
     const parsedData = JSON.parse(data);
 
-    // for (let i = 0; i < parsedData.length; i++) {
-    //     const unitid = ~~parsedData[i][0];
-    //     const fileNums = parsedData[i][1];
-    //     const sortedFiles = _insertionSort(fileNums);
-    //     // if (unitid === 236948) {
-    //     //     for (let i = 0; i < 4; i++) {
-    //     //         console.log("I found it!");
-    //     //         console.log(unitid);
-    //     //         console.log(fileNums);
-    //     //         console.log(
-    //     //             Math.min(...fileNums),
-    //     //             Math.max(...fileNums),
-    //     //             sortedFiles,
-    //     //             unitid,
-    //     //             unitid
-    //     //         );
-    //     //     }
-    //     //     createSchoolObjUnitid(
-    //     //         Math.min(...fileNums),
-    //     //         Math.max(...fileNums),
-    //     //         sortedFiles,
-    //     //         unitid,
-    //     //         unitid
-    //     //     );
-    //     // }
-    //     // await createSchoolObjUnitid(
-    //     //     Math.min(...fileNums),
-    //     //     Math.max(...fileNums),
-    //     //     sortedFiles,
-    //     //     unitid,
-    //     //     unitid
-    //     // );
-    // }
     for (const item of parsedData) {
         const unitid = ~~item[0];
         const fileNums = item[1];
         const sortedFiles = _insertionSort(fileNums);
-        // if (unitid === 236948) {
-        //     for (let i = 0; i < 4; i++) {
-        //         console.log("I found it!");
-        //         console.log(unitid);
-        //         console.log(fileNums);
-        //         console.log(
-        //             Math.min(...fileNums),
-        //             Math.max(...fileNums),
-        //             sortedFiles,
-        //             unitid,
-        //             unitid
-        //         );
-        //     }
-        //     createSchoolObjUnitid(
-        //         Math.min(...fileNums),
-        //         Math.max(...fileNums),
-        //         sortedFiles,
-        //         unitid,
-        //         unitid
-        //     );
-        // }
         await createSchoolObjUnitid(
             Math.min(...fileNums),
             Math.max(...fileNums),
