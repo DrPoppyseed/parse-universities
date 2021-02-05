@@ -50,74 +50,103 @@ function prettifyParsedMajors(filepath) {
 	};
 	let counter = 0;
 
-	for (const program of parsedData.majors) {
-		const localDeptCode = program.cipCode.split("").slice(0, 2).join("");
-		const localProgramCode = program.cipCode.split("").slice(2, 4).join("");
-		counter++;
+	if (parsedData.majors.length <= 1) {
+		const localDeptCode = parsedData.majors[0].cipCode.split("").slice(0, 2).join("");
+		const localProgramCode = parsedData.majors[0].cipCode.split("").slice(2, 4).join("");
+		const majorInfo = _parseAndLookupCIP(parsedCIPData, localDeptCode) || {major: 'Other', description: '', majorTitleJap: 'その他'}
+		console.log(parsedData.majors[0].cipCode)
+		majorTitle = majorInfo.major;
+		majorDesc = majorInfo.description;
+		majorTitleJap = majorInfo.majorTitleJap;
+		obj = {
+			...obj,
+			majors: {
+				...obj.majors,
+				[`${deptCode}`]: {
+					...deptDiscValueHolder,
+					majorCIP: deptCode,
+					majorTitle,
+					majorDesc,
+					majorTitleJap,
+					programs: [...deptDiscValueHolder.programs],
+				},
+			},
+		};
+	} else {
+		for (const program of parsedData.majors) {
+			const localDeptCode = program.cipCode.split("").slice(0, 2).join("");
+			const localProgramCode = program.cipCode.split("").slice(2, 4).join("");
+			counter++;
 
-		if (localDeptCode === deptCode) {
-			tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
-			deptDiscValueHolder.programs.push({
-				..._extractUsefulData(localProgramCode, program, credDescJapMap),
-				nameJap: "",
-				descJap: "",
-			});
-		} else {
-			let majorTitle = "",
-				majorDesc = "";
-			if (deptCode !== "00" || parsedData.majors.length === counter) {
-				const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode);
-				majorTitle = majorInfo.major;
-				majorDesc = majorInfo.description;
-				if (program.credLev)
-					tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
-				obj = {
-					...obj,
-					majors: {
-						...obj.majors,
-						[`${deptCode}`]: {
-							...deptDiscValueHolder,
-							majorCIP: deptCode,
-							majorTitle,
-							majorDesc,
-							programs: [...deptDiscValueHolder.programs],
+			if (localDeptCode === deptCode) {
+				tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
+				deptDiscValueHolder.programs.push({
+					..._extractUsefulData(localProgramCode, program, credDescJapMap),
+					nameJap: "",
+					descJap: "",
+				});
+			} else {
+				let majorTitle = "";
+				let majorDesc = "";
+				let majorTitleJap = "";
+				if (deptCode !== "00" || parsedData.majors.length === counter) {
+					const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode) || {major: 'Other', description: '', majorTitleJap: 'その他'}
+					majorTitle = majorInfo.major;
+					majorDesc = majorInfo.description;
+					majorTitleJap = majorInfo.majorTitleJap;
+					if (program.credLev)
+						tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
+					obj = {
+						...obj,
+						majors: {
+							...obj.majors,
+							[`${deptCode}`]: {
+								...deptDiscValueHolder,
+								majorCIP: deptCode,
+								majorTitle,
+								majorDesc,
+								majorTitleJap,
+								programs: [...deptDiscValueHolder.programs],
+							},
 						},
-					},
+					};
+				}
+				deptCode = localDeptCode;
+				deptDiscValueHolder = {
+					majorCIP: deptCode,
+					majorTitle,
+					majorDesc,
+					majorTitleJap,
+					majorDescJap: "",
+					programs: [
+						{
+							..._extractUsefulData(localProgramCode, program, credDescJapMap),
+							nameJap: "",
+							descJap: "",
+						},
+					],
 				};
 			}
-			deptCode = localDeptCode;
-			deptDiscValueHolder = {
-				majorCIP: deptCode,
-				majorTitle: majorTitle,
-				majorDesc: majorDesc,
-				majorTitleJap: "",
-				majorDescJap: "",
-				programs: [
-					{
-						..._extractUsefulData(localProgramCode, program, credDescJapMap),
-						nameJap: "",
-						descJap: "",
-					},
-				],
-			};
 		}
-	}
-	const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode);
-	majorTitle = majorInfo.major;
-	majorDesc = majorInfo.description;
-	obj = {
-		...obj,
-		majors: {
-			...obj.majors,
-			[`${deptCode}`]: {
-				...deptDiscValueHolder,
-				majorCIP: deptCode,
-				majorTitle,
-				majorDesc,
-				programs: [...deptDiscValueHolder.programs],
+		const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode) || {major: 'Other', description: '', majorTitleJap: 'その他'}
+		majorTitle = majorInfo.major;
+		majorDesc = majorInfo.description;
+		majorTitleJap = majorInfo.majorTitleJap;
+		obj = {
+			...obj,
+			majors: {
+				...obj.majors,
+				[`${deptCode}`]: {
+					...deptDiscValueHolder,
+					majorCIP: deptCode,
+					majorTitle,
+					majorDesc,
+					majorTitleJap,
+					programs: [...deptDiscValueHolder.programs],
+				},
 			},
-		},
-	};
+		};
+	}
 
 	const outputFilepath = `./output/majorsJsonUnitidClean/${obj.unitid}.json`;
 	_createJsonFile(outputFilepath, {
