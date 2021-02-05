@@ -36,10 +36,12 @@ function prettifyParsedMajors(filepath) {
 					...obj,
 					majors: {
 						...obj.majors,
-						[`${deptCode}`]: { ...deptDiscValueHolder },
+						[`${deptCode}`]: { majorCIP: deptCode, majorTitle, majorDesc, programs: [...deptDiscValueHolder.programs] },
 					},
 				};
 			}
+			// console.log(majorTitle)
+			// console.log(obj)
 			deptCode = localDeptCode;
 			deptDiscValueHolder = {
 				majorCIP: deptCode,
@@ -111,6 +113,11 @@ function cipToTxt() {
 
 	_createJsonFile('./output/cip/ciplookupTxt.txt', arrayHolder)
 } 
+
+// function sortCIPLookup() {
+// 	const parsedCIPData= _parsedJsonData('./output/cip/ciplookup.json')
+
+// }
 
 module.exports.prettifyParsedMajors = prettifyParsedMajors;
 module.exports.cipToTxt = cipToTxt;
