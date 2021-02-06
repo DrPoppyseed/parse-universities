@@ -59,13 +59,13 @@ const prettifyParsedMajors = (filepath: string) => {
     for (const program of parsedData.majors) {
       const localDeptCode = _getLocalDeptCode(program.cipCode);
       const localProgramCode = _getLocalProgramCode(program.cipCode);
+      tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
       counter++;
 
       if (localDeptCode === deptCode) {
         // when the current dept code is the same with the previous one
         localTracker[`${program.credLev}`] =
           localTracker[`${program.credLev}`] + 1;
-        tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
         deptDiscValueHolder.programs.push({
           ..._extractUsefulData(localProgramCode, program, CRED_DESC_JAP_MAP),
         });
