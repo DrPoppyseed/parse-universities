@@ -61,9 +61,6 @@ const prettifyParsedMajors = (filepath: string) => {
       const localProgramCode = _getLocalProgramCode(program.cipCode);
       counter++;
 
-      console.log(program.cipCode, program.credLev);
-
-      /** From the second to last node in programs*/
       if (localDeptCode === deptCode) {
         // when the current dept code is the same with the previous one
         localTracker[`${program.credLev}`] =
@@ -107,51 +104,7 @@ const prettifyParsedMajors = (filepath: string) => {
             },
           ],
         };
-
-        // deptCode = localDeptCode;
-        // if (deptCode !== "00" || parsedData.majors.length === counter) {
-        // console.log("**", program.cipCode, localTracker, "**");
-        // const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode);
-        // obj.majors.push({
-        //   ..._getMajorCIPData(parsedCIPData, program.cipCode, deptCode),
-        //   programs: [...deptDiscValueHolder.programs],
-        //   programsPerCredLevInDept: {
-        //     ...localTracker,
-        //     [`${~~program.credLev}`]:
-        //       localTracker[`${~~program.credLev}`] + 1,
-        //   },
-        // });
-        // console.log("push", deptCode, pastDeptCode, localTracker);
-        // localTracker = { ...TRACKER_INTIAL };
-        // }
-
-        // localTracker = { ...TRACKER_INTIAL };
-
-        // localTracker[`${program.credLev}`] =
-        //   localTracker[`${program.credLev}`] + 1;
-        // deptDiscValueHolder = {
-        //   ..._getMajorCIPData(parsedCIPData, deptCode, deptCode),
-        //   majorDescJap: "",
-        //   programsPerCredLevInDept: {
-        //     ...TRACKER_INTIAL,
-        //     [`${~~program.credLev}`]: 1,
-        //   },
-        //   programs: [
-        //     {
-        //       ..._extractUsefulData(
-        //         localProgramCode,
-        //         program,
-        //         CRED_DESC_JAP_MAP
-        //       ),
-        //     },
-        //   ],
-        // };
-
-        // console.log("initialize", deptCode, pastDeptCode, localTracker);
-        // localTracker = { ...TRACKER_INTIAL };
       }
-      console.log(program.cipCode, localTracker);
-      // console.log(program);
     }
     /** FOR THE LAST ELEMENT (not captured by the for loop) */
     console.log("last");
