@@ -30,7 +30,7 @@ const DEPT_INITIAL = {
   majorDesc: "",
   majorTitleJap: "",
   majorDescJap: "",
-  programsPerCredLevInDept: TRACKER_INTIAL,
+  programsPerCredLevInDept: { ...TRACKER_INTIAL },
   programs: [],
 };
 
@@ -41,14 +41,14 @@ const prettifyParsedMajors = (filepath: string) => {
   /** Initializing variables... */
   let obj = {
     ...parsedData,
-    programsPerCredLev: TRACKER_INTIAL,
+    programsPerCredLev: { ...TRACKER_INTIAL },
     majors: [],
   };
-  let deptCode = "00";
+  let deptCode = parsedData.majors[0].cipCode;
   let counter = 0;
-  let deptDiscValueHolder = DEPT_INITIAL;
-  let tracker = TRACKER_INTIAL;
-  let localTracker = TRACKER_INTIAL;
+  let deptDiscValueHolder = { ...DEPT_INITIAL };
+  let tracker = { ...TRACKER_INTIAL };
+  let localTracker = { ...TRACKER_INTIAL };
 
   /** when number of majors in school is less than 1 */
   if (parsedData.majors.length === 1) {
@@ -61,30 +61,38 @@ const prettifyParsedMajors = (filepath: string) => {
       const localProgramCode = _getLocalProgramCode(program.cipCode);
       counter++;
 
-      localTracker[`${program.credLev}`] =
-        localTracker[`${program.credLev}`] + 1;
+      console.log(program.cipCode, program.credLev);
 
       /** From the second to last node in programs*/
       if (localDeptCode === deptCode) {
+        // when the current dept code is the same with the previous one
+        localTracker[`${program.credLev}`] =
+          localTracker[`${program.credLev}`] + 1;
         tracker[`${program.credLev}`] = tracker[`${program.credLev}`] + 1;
         deptDiscValueHolder.programs.push({
           ..._extractUsefulData(localProgramCode, program, CRED_DESC_JAP_MAP),
-          nameJap: "",
-          descJap: "",
         });
       } else {
-        /** First or one node after last node in programs*/
-        if (deptCode !== "00" || parsedData.majors.length === counter) {
-          const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode);
-
+        // if the dept code is different than the previous one
+        // before updating anything with the new one, first push the existing code.
+        if (counter > 1) {
+          console.log("pushstart", deptCode, program.cipCode, localTracker);
           obj.majors.push({
-            ..._getMajorCIPData(parsedCIPData, program.cipCode, deptCode),
+            ...deptDiscValueHolder,
             programs: [...deptDiscValueHolder.programs],
-            programsPerCredLevInDept: { ...localTracker },
+            programsPerCredLevInDept: {
+              ...localTracker,
+            },
           });
-          localTracker = TRACKER_INTIAL;
+          console.log("pushend", deptCode, program.cipCode, localTracker);
         }
+
+        // after pushing the code, then, initialize for current deptcode
+        localTracker = { ...TRACKER_INTIAL, [`${~~program.credLev}`]: 1 }; // cleanup and initialize localTracker
         deptCode = localDeptCode;
+
+        console.log("init", deptCode, program.cipCode, localTracker);
+
         deptDiscValueHolder = {
           ..._getMajorCIPData(parsedCIPData, deptCode, deptCode),
           majorDescJap: "",
@@ -96,15 +104,57 @@ const prettifyParsedMajors = (filepath: string) => {
                 program,
                 CRED_DESC_JAP_MAP
               ),
-              nameJap: "",
-              descJap: "",
             },
           ],
         };
-        localTracker = TRACKER_INTIAL;
+
+        // deptCode = localDeptCode;
+        // if (deptCode !== "00" || parsedData.majors.length === counter) {
+        // console.log("**", program.cipCode, localTracker, "**");
+        // const majorInfo = _parseAndLookupCIP(parsedCIPData, deptCode);
+        // obj.majors.push({
+        //   ..._getMajorCIPData(parsedCIPData, program.cipCode, deptCode),
+        //   programs: [...deptDiscValueHolder.programs],
+        //   programsPerCredLevInDept: {
+        //     ...localTracker,
+        //     [`${~~program.credLev}`]:
+        //       localTracker[`${~~program.credLev}`] + 1,
+        //   },
+        // });
+        // console.log("push", deptCode, pastDeptCode, localTracker);
+        // localTracker = { ...TRACKER_INTIAL };
+        // }
+
+        // localTracker = { ...TRACKER_INTIAL };
+
+        // localTracker[`${program.credLev}`] =
+        //   localTracker[`${program.credLev}`] + 1;
+        // deptDiscValueHolder = {
+        //   ..._getMajorCIPData(parsedCIPData, deptCode, deptCode),
+        //   majorDescJap: "",
+        //   programsPerCredLevInDept: {
+        //     ...TRACKER_INTIAL,
+        //     [`${~~program.credLev}`]: 1,
+        //   },
+        //   programs: [
+        //     {
+        //       ..._extractUsefulData(
+        //         localProgramCode,
+        //         program,
+        //         CRED_DESC_JAP_MAP
+        //       ),
+        //     },
+        //   ],
+        // };
+
+        // console.log("initialize", deptCode, pastDeptCode, localTracker);
+        // localTracker = { ...TRACKER_INTIAL };
       }
+      console.log(program.cipCode, localTracker);
+      // console.log(program);
     }
     /** FOR THE LAST ELEMENT (not captured by the for loop) */
+    console.log("last");
     obj.majors.push({
       ..._getMajorCIPData(parsedCIPData, deptCode, deptCode),
       programsPerCredLevInDept: { ...localTracker },
@@ -203,6 +253,8 @@ function _extractUsefulData(localProgramCode, program, credDescJapMap) {
     graduates: graduates,
     medianIncome1: medianIncome1,
     medianIncome2: medianIncome2,
+    nameJap: "",
+    descJap: "",
   };
 }
 
