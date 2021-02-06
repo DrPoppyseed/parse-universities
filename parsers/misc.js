@@ -73,7 +73,7 @@ const prettifyParsedMajors = (filepath: string) => {
         // if the dept code is different than the previous one
         // before updating anything with the new one, first push the existing code.
         if (counter > 1) {
-          console.log("pushstart", deptCode, program.cipCode, localTracker);
+          // push starts
           obj.majors.push({
             ...deptDiscValueHolder,
             programs: [...deptDiscValueHolder.programs],
@@ -81,14 +81,12 @@ const prettifyParsedMajors = (filepath: string) => {
               ...localTracker,
             },
           });
-          console.log("pushend", deptCode, program.cipCode, localTracker);
         }
 
         // after pushing the code, then, initialize for current deptcode
+        // initialization starts
         localTracker = { ...TRACKER_INTIAL, [`${~~program.credLev}`]: 1 }; // cleanup and initialize localTracker
         deptCode = localDeptCode;
-
-        console.log("init", deptCode, program.cipCode, localTracker);
 
         deptDiscValueHolder = {
           ..._getMajorCIPData(parsedCIPData, deptCode, deptCode),
@@ -107,7 +105,7 @@ const prettifyParsedMajors = (filepath: string) => {
       }
     }
     /** FOR THE LAST ELEMENT (not captured by the for loop) */
-    console.log("last");
+
     obj.majors.push({
       ..._getMajorCIPData(parsedCIPData, deptCode, deptCode),
       programsPerCredLevInDept: { ...localTracker },
