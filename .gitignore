@@ -1,4 +1,6 @@
 /node_modules
 /output
+/resources
 /local.js
 .DS_Store
+*/.DS_Store
