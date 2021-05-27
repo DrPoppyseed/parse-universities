@@ -8,6 +8,7 @@ function mergeInstAndMajors(instFilepath, majorsFilepath) {
   const result = {
     ...parsedInstData,
     majors: [...parsedMajorsData.majors],
+    programsPerCredLev: parsedMajorsData.programsPerCredLev,
   };
   common.createJsonFile(
     `./output/merged/${parsedInstData.unitid}.json`,
