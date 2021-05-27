@@ -24,23 +24,43 @@ function parseInstitutions(from, to) {
   }
 }
 
-function parseInstitutionAndJoin(from, to) {
+async function parseInstitutionsAndOutputNameTxt(from, to) {
+  const filename = `./output/institutionNames${from}-${to}.json`;
+  let arr = [];
   for (let i = from; i <= to; i++) {
-    console.log(i);
+    // console.log(i);
     const filePath = `./csv/institutionAllData/institution${i}.csv`;
-    csv()
+    const tempArr = await csv()
       .fromFile(filePath)
       .then(async (res) => {
-        return await res.map((school, index) => {
-          return _extractInfoFromCsv(school);
-        });
+        return await res.map((school, index) => _extractNameFromCsv(school));
       })
-      .then((item) => {
-        const filename = `./output/institutionJoined/institutionData${from}-${to}.json`;
-        fr.appendFile(filename, JSON.stringify);
-      });
+      .catch((err) => console.log(err));
+    arr = [...arr, ...tempArr];
   }
+  fs.appendFile(filename, JSON.stringify(arr), (err) => {
+    if (err) console.log(err);
+    else console.log(filename);
+  });
 }
+
+// function parseInstitutionAndJoin(from, to) {
+//   for (let i = from; i <= to; i++) {
+//     console.log(i);
+//     const filePath = `./csv/institutionAllData/institution${i}.csv`;
+//     csv()
+//       .fromFile(filePath)
+//       .then(async (res) => {
+//         return await res.map((school, index) => {
+//           return _extractInfoFromCsv(school);
+//         });
+//       })
+//       .then((item) => {
+//         const filename = `./output/institutionJoined/institutionData${from}-${to}.json`;
+//         fr.appendFile(filename, JSON.stringify);
+//       });
+//   }
+// }
 
 function parseJoinedAndOutputPerFile(filepath) {
   const parsedData = _parsedJsonData(filepath);
@@ -59,6 +79,10 @@ function _createJsonFile(outputFilepath, jsObj) {
     if (err) console.log(err);
     console.log(`${outputFilepath} file successfully created!`);
   });
+}
+
+function _extractNameFromCsv(obj) {
+  return obj.INSTNM;
 }
 
 /** TODO: refactor, extract verification and formatting logic to helper function */
@@ -169,4 +193,6 @@ function _extractInfoFromCsv(obj) {
 }
 
 module.exports.parseInstitutions = parseInstitutions;
+module.exports.parseInstitutionsAndOutputNameTxt =
+  parseInstitutionsAndOutputNameTxt;
 module.exports.parseJoinedAndOutputPerFile = parseJoinedAndOutputPerFile;
