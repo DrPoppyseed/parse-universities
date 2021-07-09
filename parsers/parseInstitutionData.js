@@ -1,6 +1,7 @@
 const fs = require("fs");
 const csv = require("csvtojson");
 const miscHelper = require("./helpers/miscHelper");
+const uniqid = require("uniqid");
 
 function parseInstitutions(from, to) {
   for (let i = from; i <= to; i++) {
@@ -82,7 +83,7 @@ function _createJsonFile(outputFilepath, jsObj) {
 }
 
 function _extractNameFromCsv(obj) {
-  return obj.INSTNM;
+  return { name: obj.INSTNM, uuid: uniqid() };
 }
 
 /** TODO: refactor, extract verification and formatting logic to helper function */
